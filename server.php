@@ -1,38 +1,22 @@
 <?php
 
 header( 'Content-Type: application/json' );
-
+/*
 if ( !array_key_exists( 'HTTP_X_TOKEN', $_SERVER ) ) {
 
 	die;
 }
 
-$url = 'http://localhost:8001/';
-
-$ch = curl_init( $url );
-curl_setopt( $ch, CURLOPT_HTTPHEADER, [
-	"X-Token: {$_SERVER['HTTP_X_TOKEN']}",
-]);
-curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-$ret = curl_exec( $ch );
-
-if ( curl_errno($ch) != 0 ) {
-	die ( curl_error($ch) );
-}
-
-if ( $ret !== 'true' ) {
-	http_response_code( 403 );
-
-	die;
-}
-
+$url = 'https://'.$_SERVER['HTTP_HOST'].'/auth';
+*/
 $allowedResourceTypes = [
 	'books',
 	'authors',
 	'genres',
 ];
-
+//validamos que el recurso este disponible
 $resourceType = $_GET['resource_type'];
+
 if ( !in_array( $resourceType, $allowedResourceTypes ) ) {
 	http_response_code( 400 );
 	echo json_encode(
@@ -62,7 +46,9 @@ $books = [
 	],
 ];
 
+//levantamos el id del recurso buscado
 $resourceId = array_key_exists('resource_id', $_GET ) ? $_GET['resource_id'] : '';
+//generamos la respuesta asumiendo que el pedido es correcto
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ( strtoupper( $method ) ) {
